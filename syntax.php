@@ -38,7 +38,7 @@ class syntax_plugin_mobiletable extends DokuWiki_Syntax_Plugin {
         if ($mode == 'xhtml') {
             $renderer->doc .= $data;
         }
-		return true;
+        return true;
     }
 
 }
