@@ -7,18 +7,18 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
     }
 
 
-	function register(Doku_Event_Handler $controller) {
-		$controller->register_hook(
+    function register(Doku_Event_Handler $controller) {
+        $controller->register_hook(
             'PARSER_WIKITEXT_PREPROCESS',
             'BEFORE',
             $this,
             'transform'
         );
-	}
+    }
 
 
-	// Find all tables to rewrite.
-	function transform(&$event, $param) {
+    // Find all tables to rewrite.
+    function transform(&$event, $param) {
         // Find all tables marked with "!".
         $event->data = preg_replace_callback(
             '/^!(\^.+)\r?\n((?:^[\|\^].+\r?\n)+)/m',
