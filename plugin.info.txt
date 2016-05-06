@@ -1,0 +1,5 @@
+base   mobiletable
+author bleistivt
+date   2016-05-04
+name   Mobile Tables
+desc   Rearranges tables to be responsive.
