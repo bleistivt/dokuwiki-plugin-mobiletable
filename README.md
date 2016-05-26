@@ -54,7 +54,7 @@ In the mobile presentation (specified by your theme's `__phone_width__`) this:
     </tr>
 </table>
 
-===== Syntax =====
+## Syntax
 
 To activate mobile tables, add ''!'' in front of a table's head row:
 
