@@ -30,11 +30,11 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
     // Rearrange tables
     private function rearrange($m) {
-        list($schema, $i) = $this->schema($this->mask($m[1]));
-        $table = $this->table($schema, $i, $this->mask($m[2]));
+        list($schema, $i) = $this->schema($m[1]);
+        $table = $this->table($schema, $i, $m[2]);
         // Put everything together.
         return "<only mobile>\n"
-            .$this->unmask($table)
+            .$table
             ."\n</only>\n<only desktop>\n"
             .str_replace('^!', '^', $m[1])."\n".$m[2]
             ."\n</only>\n";
@@ -43,6 +43,7 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
     // Extract the table schema.
     private function schema($row) {
+        $row = $this->mask($row);
         $schema = [];
         $index = -1;
         $last = '';
@@ -61,6 +62,7 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
     // Build the mobile table.
     private function table($schema, $index, $body) {
+        $body = $this->mask($body);
         $table = '';
         $length = count($schema);
         foreach(explode("\n", $body) as $line) {
@@ -81,12 +83,12 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
             }
             for ($i = 0; $i < $length; $i++) {
                 if ($i != $index) {
-                    $row[$i] = $row[$i] === '' ? ' ' : $row[$i];
+                    $row[$i] = $row[$i] === '' ? ':::' : $row[$i];
                     $table .= "|{$schema[$i]}|{$row[$i]}|\n";
                 }
             }
         }
-        return $table;
+        return $this->unmask($table);
     }
 
 
