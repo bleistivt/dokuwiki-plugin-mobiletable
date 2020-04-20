@@ -2,6 +2,9 @@
 
 class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
+    private $enabled = true;
+
+
     function __construct() {
         $this->token = '~%'.uniqid().'%~';
     }
@@ -14,11 +17,29 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
             $this,
             'transform'
         );
+        $controller->register_hook(
+            'HTML_EDITFORM_OUTPUT',
+            'BEFORE',
+            $this,
+            'disable',
+            -1
+        );
+    }
+
+
+    function disable(&$event, $param) {
+        $this->enabled = false;
     }
 
 
     // Find all tables to rewrite.
     function transform(&$event, $param) {
+        global $INPUT;
+
+        if (!$this->enabled || $INPUT->str('call') == 'plugin_prosemirror_switch_editors') {
+            return;
+        }
+
         // Find all tables marked with "!".
         $event->data = preg_replace_callback(
             '/^!(\^.+)\r?\n((?:^[\|\^].+\r?\n)+)/m',
@@ -47,7 +68,7 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
         $schema = [];
         $index = -1;
         $last = '';
-        foreach(explode('^', substr(trim($row), 1, -1)) as $th) {
+        foreach (explode('^', substr(trim($row), 1, -1)) as $th) {
             // Check for the index column
             if (substr($th, 0, 1) == '!') {
                 $index = count($schema);
@@ -65,7 +86,7 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
         $body = $this->mask($body);
         $table = '';
         $length = count($schema);
-        foreach(explode("\n", $body) as $line) {
+        foreach (explode("\n", $body) as $line) {
             if (substr_count($line, '^') == $length + 1) {
                 // A random header row appeared!
                 $table .= '^'.str_replace('^', '', $line)."^^\n";
