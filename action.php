@@ -2,9 +2,6 @@
 
 class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
-    private $enabled = true;
-
-
     function __construct() {
         $this->token = '~%'.uniqid().'%~';
     }
@@ -17,29 +14,11 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
             $this,
             'transform'
         );
-        $controller->register_hook(
-            'HTML_EDITFORM_OUTPUT',
-            'BEFORE',
-            $this,
-            'disable',
-            -1
-        );
-    }
-
-
-    function disable(&$event, $param) {
-        $this->enabled = false;
     }
 
 
     // Find all tables to rewrite.
     function transform(&$event, $param) {
-        global $INPUT;
-
-        if (!$this->enabled || $INPUT->str('call') == 'plugin_prosemirror_switch_editors') {
-            return;
-        }
-
         // Find all tables marked with "!".
         $event->data = preg_replace_callback(
             '/^!(\^.+)\r?\n((?:^[\|\^].+\r?\n)+)/m',
