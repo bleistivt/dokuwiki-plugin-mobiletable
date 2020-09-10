@@ -1,3 +1,5 @@
+// Uncompressed script. DokuWikis JS compressor does not support ASI. To be compressed with https://closure-compiler.appspot.com/
+
 window.mobileTables = ((options) => {
 
     options = options || {}
@@ -231,8 +233,8 @@ window.mobileTables = ((options) => {
             const original = tables.get(table)
 
             if (original === undefined) {
-                console.log("mobileTables: Cannot find original for table:")
-                console.log(table)
+                //console.log("mobileTables: Cannot find original for table:")
+                //console.log(table)
                 continue
             }
 
