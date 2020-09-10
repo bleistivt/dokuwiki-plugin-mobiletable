@@ -199,6 +199,8 @@ window.mobileTables = ((options) => {
     const transform = doc => {
         doc = doc || document
 
+        let mutation = false
+
         for (let table of doc.querySelectorAll(selector)) {
             if (tables.has(table)) {
                 return
@@ -213,11 +215,17 @@ window.mobileTables = ((options) => {
             // Replace the original table and save it for later.
             tables.set(mobile, table)
             dummy.replaceWith(mobile)
+
+            mutation = true
         }
+
+        return mutation
     }
 
     const undo = doc => {
         doc = doc || document
+
+        let mutation = false
 
         for (let table of doc.querySelectorAll(selector)) {
             const original = tables.get(table)
@@ -240,7 +248,11 @@ window.mobileTables = ((options) => {
             }
 
             dummy.replaceWith(original)
+
+            mutation = true
         }
+
+        return mutation
     }
 
     return (isMobile, doc) => isMobile ? transform(doc) : undo(doc)
@@ -266,7 +278,10 @@ window.checkMobileTables = () => {
         .getPropertyValue("content")
         .replace(/"|'/g, "")
 
-    window.mobileTables(before === "mobile")
+    if (window.mobileTables(before === "mobile") && window.location.hash) {
+        // Scroll to anchor after transformation.
+        window.location.hash = window.location.hash
+    }
 }
 
 // document.ready
