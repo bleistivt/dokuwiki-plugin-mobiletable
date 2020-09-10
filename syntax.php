@@ -19,16 +19,17 @@ class syntax_plugin_mobiletable extends DokuWiki_Syntax_Plugin {
     }
 
     function connectTo($mode){
-        $this->Lexer->addEntryPattern('<only (?:mobile|desktop)>(?=.*?</only>)', $mode, 'plugin_mobiletable');
+        $this->Lexer->addEntryPattern('<mobiletable(?: [0-9]+)?>(?=.*?</mobiletable>)', $mode, 'plugin_mobiletable');
     }
 
     function postConnect(){
-        $this->Lexer->addExitPattern('<\/only>', 'plugin_mobiletable');
+        $this->Lexer->addExitPattern('<\/mobiletable>', 'plugin_mobiletable');
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
         if ($state == DOKU_LEXER_ENTER) {
-            return '<div class="mobiletable '.substr($match, 6, -1).'only">';
+            preg_match('/<mobiletable ([0-9]+)?>/i', $match, $parts);
+            return '<div class="mobiletable" data-column="'.($parts[1] ?? '-1').'">';
         } elseif ($state == DOKU_LEXER_EXIT) {
             return '</div>';
         }

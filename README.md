@@ -128,6 +128,3 @@ Using the first example again, your could also make the _Color_ column the main 
         <td> Speed </td><td> 30 km/h </td>
     </tr>
 </table>
-
-
-Additionally this plugin provides `<only desktop></only>` and `<only mobile></only>` markup (which it also uses internally) that can be used to hide content from one or the other.

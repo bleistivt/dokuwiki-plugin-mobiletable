@@ -1,14 +1,10 @@
-div.mobiletable.mobileonly {
+div.mobiletable:before {
+    content: "desktop";
     display: none;
 }
-div.mobiletable.desktoponly {
-    display: block;
-}
+
 @media (max-width:__phone_width__) {
-    div.mobiletable.mobileonly {
-        display:block;
-    }
-    div.mobiletable.desktoponly {
-        display: none;
+    div.mobiletable:before {
+        content: "mobile";
     }
 }
