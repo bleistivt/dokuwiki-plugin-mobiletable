@@ -20,9 +20,11 @@ In the mobile presentation (specified by your theme's `__phone_width__`) this:
 </table>
 
 ```
-!^! Name   ^ Color ^ Size  ^ Speed   ^
+<mobiletable 1>
+^ Name   ^ Color ^ Size  ^ Speed   ^
 ^ Item 1   | Red   | Small | 50 km/h |
 ^ Item 2   | Green | Large | 30 km/h |
+</mobiletable>
 ```
 
 ...becomes this:
@@ -56,12 +58,14 @@ In the mobile presentation (specified by your theme's `__phone_width__`) this:
 
 ## Syntax
 
-To activate mobile tables, add ''!'' in front of a table's head row:
+To activate mobile tables, wrap it in `<mobiletable>...</mobiletable>` syntax:
 
 ```
-!^ Name   ^ Color ^ Size  ^ Speed   ^
+<mobiletable>
+^ Name   ^ Color ^ Size  ^ Speed   ^
 ^ Item 1  | Red   | Small | 50 km/h |
 ^ Item 2  | Green | Large | 30 km/h |
+</mobiletable>
 ```
 
 This would create a mobile table like this:
@@ -93,13 +97,15 @@ This would create a mobile table like this:
     </tr>
 </table>
 
-Use a second `!` as the first character of the cell that you want to make the main/index column.
+You may specify the index (starting with 1) of the column you want to make the main/index column.
 Using the first example again, your could also make the _Color_ column the main column:
 
 ```
-!^ Name   ^! Color ^ Size  ^ Speed   ^
+<mobiletable 2>
+^ Name   ^ Color ^ Size  ^ Speed   ^
 ^ Item 1  | Red    | Small | 50 km/h |
 ^ Item 2  | Green  | Large | 30 km/h |
+</mobiletable>
 ```
 
 <table>
@@ -128,3 +134,12 @@ Using the first example again, your could also make the _Color_ column the main 
         <td> Speed </td><td> 30 km/h </td>
     </tr>
 </table>
+
+Note that the previous example could also be expressed using the ''!''-syntax for backwards compatibility:
+
+```
+!^ Name   ^! Color ^ Size  ^ Speed   ^
+...
+```
+
+However, this syntax is not recommended anymore as it breaks section editing.

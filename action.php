@@ -31,7 +31,7 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
     // Wrap a table in <mobiletable> syntax.
     private function wrap_table($m) {
         list($schema, $i) = $this->schema($m[1]);
-        return "<mobiletable".($i > -1 ? " ".$i : "").">\n"
+        return "<mobiletable".($i > -1 ? " ".($i + 1) : "").">\n"
             .str_replace('^!', '^', $m[1])."\n".$m[2]
             ."\n</mobiletable>\n";
     }

@@ -1,4 +1,4 @@
-// Uncompressed script. DokuWikis JS compressor does not support ASI. To be compressed with https://closure-compiler.appspot.com/
+// Uncompressed script. DokuWikis JS compressor does not support ASI. To be compressed with https://closure-compiler.appspot.com/ (SIMPLE)
 
 window.mobileTables = ((options) => {
 
@@ -14,10 +14,10 @@ window.mobileTables = ((options) => {
     const hideHeadings = options.hideHeadings || []
 
     // Holds references to the original <table> elements to undo the transformation.
-    const tables = new WeakMap()
+    const tableMap = new WeakMap()
 
     // Holds references to the transformed <th> and <td> elements to undo the transformation.
-    const cells = new WeakMap()
+    const cellMap = new WeakMap()
 
     // Indicates that a cell should be treated as part of the index column.
     const indexColumn = Symbol("index")
@@ -41,7 +41,7 @@ window.mobileTables = ((options) => {
             while (indexSpan < colSpan) {
                 if (i === columnIndex) {
                     schema.push(indexColumn)
-                } else if (hideHeadings.includes(cell.innerText)) {
+                } else if (hideHeadings.includes(cell.innerText.trim())) {
                     schema.push(hiddenHeading)
                 } else {
                     let td = document.createElement("td")
@@ -88,7 +88,7 @@ window.mobileTables = ((options) => {
         }
 
         if (moveContent(cell, newCell)) {
-            cells.set(cell, newCell)
+            cellMap.set(cell, newCell)
         }
         tr.appendChild(newCell)
 
@@ -102,7 +102,7 @@ window.mobileTables = ((options) => {
         newCell.className = cell.className
 
         if (moveContent(cell, newCell)) {
-            cells.set(cell, newCell)
+            cellMap.set(cell, newCell)
         }
         tr.appendChild(newCell)
 
@@ -198,13 +198,13 @@ window.mobileTables = ((options) => {
         return dummy
     }
 
-    const transform = doc => {
-        doc = doc || document
+    const transform = tables => {
+        tables = tables || document.querySelectorAll(selector)
 
         let mutation = false
 
-        for (let table of doc.querySelectorAll(selector)) {
-            if (tables.has(table)) {
+        for (let table of tables) {
+            if (tableMap.has(table)) {
                 return
             }
 
@@ -215,7 +215,7 @@ window.mobileTables = ((options) => {
             const mobile = buildTable(table, extractSchema(table, columnIndex))
 
             // Replace the original table and save it for later.
-            tables.set(mobile, table)
+            tableMap.set(mobile, table)
             dummy.replaceWith(mobile)
 
             mutation = true
@@ -224,13 +224,13 @@ window.mobileTables = ((options) => {
         return mutation
     }
 
-    const undo = doc => {
-        doc = doc || document
+    const undo = tables => {
+        tables = tables || document.querySelectorAll(selector)
 
         let mutation = false
 
-        for (let table of doc.querySelectorAll(selector)) {
-            const original = tables.get(table)
+        for (let table of tables) {
+            const original = tableMap.get(table)
 
             if (original === undefined) {
                 //console.log("mobileTables: Cannot find original for table:")
@@ -242,7 +242,7 @@ window.mobileTables = ((options) => {
 
             // Move the cell contents back to the original table.
             for (let cell of original.querySelectorAll("td, th")) {
-                const transformed = cells.get(cell)
+                const transformed = cellMap.get(cell)
 
                 if (transformed !== undefined) {
                     moveContent(transformed, cell)
@@ -257,7 +257,7 @@ window.mobileTables = ((options) => {
         return mutation
     }
 
-    return (isMobile, doc) => isMobile ? transform(doc) : undo(doc)
+    return (isMobile, tables) => isMobile ? transform(tables) : undo(tables)
 
 })({
     selector: "div.page div.mobiletable table",
