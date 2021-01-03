@@ -132,6 +132,9 @@ window.mobileTables = ((options) => {
         const tbody = table.querySelector("tbody").cloneNode(false)
         newTable.appendChild(tbody)
 
+        // Check for rowspans that need to be skipped.
+        let rowSpans = new Array(schema.length).fill(0)
+
         let skip = true
 
         // Iterating all children of the <tbody> is not sufficient as there may be multiple <tr> elements inside <thead>.
@@ -155,8 +158,17 @@ window.mobileTables = ((options) => {
             let i = 0
             let rowSpan = 1
 
+            let colOffset = 0
+
             for (let name of schema) {
-                if (row.children[i] === undefined) {
+                if (rowSpans[i] > 0) {
+                    rowSpans[i] = rowSpans[i] - 1
+                    colOffset = colOffset + 1
+                    i = i + 1
+                    continue
+                }
+
+                if (row.children[i - colOffset] === undefined) {
                     console.log("mobileTables: Unsupported table layout:")
                     console.log(row)
                     break
@@ -164,17 +176,18 @@ window.mobileTables = ((options) => {
 
                 if (i === columnIndex) {
                     // The index column has already been created above, add the content.
-                    addHeaderCell(header, row.children[i])
+                    addHeaderCell(header, row.children[i - colOffset])
                 } else {
                     const tr = addRow(tbody)
                     if (name !== hiddenHeading) {
                         addNameCell(tr, name)
                     }
 
-                    const colSpan = row.children[i].colSpan
+                    const colSpan = row.children[i - colOffset].colSpan
+                    rowSpans[i] = row.children[i - colOffset].rowSpan - 1
 
                     if (rowSpan === 1) {
-                        const newCell = addCell(tr, row.children[i], name === hiddenHeading)
+                        const newCell = addCell(tr, row.children[i - colOffset], name === hiddenHeading)
                         newCell.rowSpan = colSpan
                     }
 
