@@ -9,10 +9,26 @@ class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
     function register(Doku_Event_Handler $controller) {
         $controller->register_hook(
+            'DOKUWIKI_STARTED',
+            'AFTER',
+            $this,
+            'js_conf'
+        );
+        $controller->register_hook(
             'PARSER_WIKITEXT_PREPROCESS',
             'BEFORE',
             $this,
             'transform'
+        );
+    }
+
+
+    // Pass configuration to JS
+    function js_conf(&$event, $param) {
+        global $JSINFO;
+        $JSINFO['plugin_mobiletable_hideHeadings'] = array_map(
+            'trim',
+            explode(',', $this->getConf('hideHeadings'))
         );
     }
 

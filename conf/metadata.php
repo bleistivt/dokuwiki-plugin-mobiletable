@@ -1,0 +1,3 @@
+<?php
+
+$meta['hideHeadings'] = ['string'];

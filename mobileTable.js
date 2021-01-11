@@ -278,7 +278,7 @@ window.mobileTables = ((options) => {
         const index = parseInt(node.parentElement.parentElement.getAttribute("data-column"), 10)
         return (isNaN(index) || index < 0) ? -1 : index
     },
-    hideHeadings: ["image", "Image", "Bild"]
+    hideHeadings: window.JSINFO["plugin_mobiletable_hideHeadings"] || []
 })
 
 
