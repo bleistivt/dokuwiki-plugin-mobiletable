@@ -217,7 +217,7 @@ window.mobileTables = ((options) => {
         let mutation = false
 
         for (let table of tables) {
-            if (tableMap.has(table)) {
+            if (tableMap.has(table) || table.classList.has("mobiletable-transformed")) {
                 return
             }
 
@@ -230,6 +230,8 @@ window.mobileTables = ((options) => {
             // Replace the original table and save it for later.
             tableMap.set(mobile, table)
             dummy.replaceWith(mobile)
+
+           table.classList.add("mobiletable-transformed")
 
             mutation = true
         }
@@ -263,6 +265,8 @@ window.mobileTables = ((options) => {
             }
 
             dummy.replaceWith(original)
+
+            table.classList.remove("mobiletable-transformed")
 
             mutation = true
         }
