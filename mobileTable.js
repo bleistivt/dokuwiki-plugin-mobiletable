@@ -133,13 +133,13 @@ window.mobileTables = ((options) => {
         newTable.appendChild(tbody)
 
         // Check for rowspans that need to be skipped.
-        let rowSpans = new Array(schema.length).fill(0)
+        const rowSpans = new Array(schema.length).fill(0)
 
         let skip = true
 
         // Iterating all children of the <tbody> is not sufficient as there may be multiple <tr> elements inside <thead>.
         for (let row of table.querySelectorAll("tr")) {
-            // Skip the first tow (header)
+            // Skip the first row (header).
             if (skip) {
                 skip = false
                 continue
@@ -199,6 +199,8 @@ window.mobileTables = ((options) => {
 
                 i = i + 1
             }
+            
+            rowSpans.fill(0)
         }
 
         return newTable
