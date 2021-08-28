@@ -148,6 +148,8 @@ window.mobileTables = ((options) => {
             // A random header row appeared!
             if (row.children.length === 1) {
                 addCell(addRow(tbody), row.firstElementChild, true)
+                // This resets row spans.
+                rowSpans.fill(0)
                 continue
             }
 
@@ -199,8 +201,6 @@ window.mobileTables = ((options) => {
 
                 i = i + 1
             }
-            
-            rowSpans.fill(0)
         }
 
         return newTable
