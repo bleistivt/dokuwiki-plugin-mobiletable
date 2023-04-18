@@ -1,5 +1,5 @@
 base   mobiletable
 author bleistivt
-date   2021-08-28
+date   2023-04-18
 name   Mobile Tables
 desc   Rearranges tables to be responsive.
