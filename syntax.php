@@ -29,7 +29,7 @@ class syntax_plugin_mobiletable extends DokuWiki_Syntax_Plugin {
     function handle($match, $state, $pos, Doku_Handler $handler) {
         if ($state == DOKU_LEXER_ENTER) {
             preg_match('/<mobiletable ([0-9]+)?>/i', $match, $parts);
-            return '<div class="mobiletable" data-column="'.($parts[1] > 0 ? $parts[1] - 1 : '-1').'">';
+            return '<div class="mobiletable" data-column="'.(isset($parts[1]) && $parts[1] > 0 ? $parts[1] - 1 : '-1').'">';
         } elseif ($state == DOKU_LEXER_EXIT) {
             return '</div>';
         }
