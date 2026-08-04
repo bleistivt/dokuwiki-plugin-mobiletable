@@ -2,6 +2,9 @@
 
 class action_plugin_mobiletable extends DokuWiki_Action_Plugin {
 
+    // Must be declared: dynamic properties are deprecated as of PHP 8.2.
+    private $token;
+
     function __construct() {
         $this->token = '~%'.uniqid().'%~';
     }
